@@ -1,5 +1,6 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
+const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   entry: "./src/index.js",
@@ -17,6 +18,12 @@ module.exports = {
       template: "./src/index.html",
       scriptLoading: "defer",
     }),
+    new CopyPlugin({
+      patterns: [
+        './src/images',
+        './src/style.css',
+      ],
+    }),
   ],
   module: {
     rules: [
@@ -30,6 +37,10 @@ module.exports = {
           },
         },
       },
+      {
+        test: /\.css$/i,
+        use: ['style-loader', 'css-loader'],
+      }
     ],
   },
 };
