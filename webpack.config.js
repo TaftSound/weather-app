@@ -12,6 +12,7 @@ module.exports = {
   output: {
     filename: "main.js",
     path: path.resolve(__dirname, 'dist'),
+    clean: true,
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -20,7 +21,7 @@ module.exports = {
     }),
     new CopyPlugin({
       patterns: [
-        './src/images',
+        { from: './src/images/', to: './images/' },
         './src/style.css',
       ],
     }),
