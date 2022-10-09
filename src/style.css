@@ -1,70 +1,91 @@
 :root {
-  --main-font-color: rgb(75, 75, 85);
+  --main-font-color: rgb(45, 45, 65);
   --secondary-color: rgb(210, 210, 225);
 }
 body {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
   align-items: center;
   min-height: 100vh;
+  margin: 0px;
   background-image: url('./images/clouds.jpg');
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  color: var(--main-font-color);
 }
-.form-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: rgb(210, 210, 225);
-  padding: 30px;
-  padding-bottom: 40px;
-  box-shadow: inset 2px 2px 2px rgba(255, 255, 255, 0.35),
-  inset -2px -2px 2px rgb(0, 0, 0, 0.25),
-  6px 6px 8px 2px rgb(0, 0, 0, 0.05);
-  border-radius: 10px;
-  width: max-content;
+h1 {
+  font-weight: 800;
+  font-size: 26px;
+  margin: 5px 0px;
+  height: min-content;
 }
+h2 {
+  font-weight: 400;
+  font-size: 20px;
+  margin: 0px;
+  height: min-content;
+}
+/* Container styling =============================================================== */
+.current-weather-display {
+  /* background-color: aqua; */
+  box-sizing: border-box;
+  padding: 15px 25px;
+  height: 100%;
+  width: 100%;
+}
+.location-display {
+  /* background-color: aquamarine; */
+  box-sizing: border-box;
+  padding: 15px 25px;
+  height: 100%;
+  width: 100%;
+  display: grid;
+  justify-items: flex-end;
+  text-align: right;
+  grid-auto-rows: min-content;
+  gap: 5px;
+}
+.forecast-graph {
+  /* background-color: beige; */
+  grid-column: 1/-1;
+  box-sizing: border-box;
+  padding: 25px;
+  height: 100%;
+  width: 100%;
+}
+.forecast-details {
+  /* background-color: brown; */
+  grid-column: 1/-1;
+  box-sizing: border-box;
+  padding: 25px;
+  height: 100%;
+  width: 100%;
+}
+/* Form styling =============================================================== */
 form {
   height: fit-content;
-  background-color: rgb(210, 210, 225);
+  width: 100%;
   color: var(--main-font-color);
   border-radius: 5px;
   display: grid;
   grid-auto-rows: min-content;
-  gap: 10px;
+  gap: 5px;
 }
-form h1 {
-  margin: 10px;
-  margin-bottom: 25px;
-  font-weight: 900;
-  font-size: 26px;
-  text-align: center;
-}
-label {
-  margin-bottom: -5px;
-  margin-top: 5px;
+/* label {
+  justify-self: center;
   font-weight: 900;
   font-size: 18px;
-}
-select {
-  appearance: none;
-}
-input,
-button,
-select {
+} */
+input {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   font-size: 18px;
+  font-weight: 400;
   outline: none;
   border: none;
   height: max-content;
-  max-width: 350px;
   border-radius: 7.5px;
-  padding: 10px 15px;
-  background-color: rgb(230, 230, 245);
+  padding: 10px 20px;
+  margin-top: 25px;
+  background-color: rgba(255, 255, 255, 0.6);
   color: var(--main-font-color);
-}
-button {
-  font-weight: 900;
-  margin-top: 40px;
-  margin-bottom: 20px;
 }

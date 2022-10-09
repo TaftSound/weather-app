@@ -1,6 +1,7 @@
 let searchValue = ''
 let latitude = ''
 let longitude = ''
+let locationName = ''
 
 function getFormValue (inputElement) {
   searchValue = inputElement.value
@@ -18,8 +19,10 @@ async function getPreciseLocation () {
       `http://api.openweathermap.org/geo/1.0/direct?q=${searchValue}&limit=1&appid=c48bcffd61ca0ded777af3c42746942e`,
       { mode: 'cors' }
     )
-    console.log(`http://api.openweathermap.org/geo/1.0/direct?q=${searchValue}&limit=1&appid=c48bcffd61ca0ded777af3c42746942e`)
     const locationObject = await location.json()
+    console.log(locationObject)
+    locationName = `${locationObject[0].name}, ${locationObject[0].state}, ${locationObject[0].country}`
+    console.log(locationName)
     latitude = locationObject[0].lat
     longitude = locationObject[0].lon
   } catch (error) {
@@ -29,7 +32,7 @@ async function getPreciseLocation () {
 }
 async function getCurrentWeather () {
   try {
-    const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=c48bcffd61ca0ded777af3c42746942e`, { mode: 'cors' })
+    const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=imperial&appid=c48bcffd61ca0ded777af3c42746942e`, { mode: 'cors' })
     const currentWeatherObject = await response.json()
     return currentWeatherObject
   } catch (error) {
@@ -39,7 +42,7 @@ async function getCurrentWeather () {
 }
 async function getWeatherForecast () {
   try {
-    const response = await fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=c48bcffd61ca0ded777af3c42746942e`, { mode: 'cors' })
+    const response = await fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&units=imperial&appid=c48bcffd61ca0ded777af3c42746942e`, { mode: 'cors' })
     const weatherForecastObject = await response.json()
     return weatherForecastObject
   } catch (error) {
