@@ -1,11 +1,15 @@
 :root {
   --main-font-color: rgb(45, 45, 65);
-  --secondary-color: rgb(210, 210, 225);
+  --secondary-font-color: rgb(105, 105, 125);
+  --light-font-color: rgb(155, 155, 175);
+  --accent-color: rgb(235,110,76);
+  --light-accent: rgb(0, 0, 0, .2);
+  --extra-light-accent: rgb(0, 0, 0, .075);
 }
 body {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr 1fr;
+  grid-template-rows: .8fr 1fr 1fr;
   align-items: center;
   min-height: 100vh;
   margin: 0px;
@@ -13,26 +17,108 @@ body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   color: var(--main-font-color);
 }
+.overlay {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(255, 255, 255, 0.6);
+  z-index: -1;
+}
 h1 {
   font-weight: 800;
-  font-size: 26px;
-  margin: 5px 0px;
+  font-size: 30px;
+  margin: 4px 0px;
   height: min-content;
 }
 h2 {
   font-weight: 400;
-  font-size: 20px;
+  font-size: 24px;
   margin: 0px;
   height: min-content;
+  color: var(--secondary-font-color);
+}
+h3 {
+  font-weight: 400;
+  font-size: 16px;
+  margin: 0px;
+  height: min-content;
+  color: var(--secondary-font-color);
 }
 /* Container styling =============================================================== */
+/* Current weather container ======================================================= */
 .current-weather-display {
   /* background-color: aqua; */
   box-sizing: border-box;
   padding: 15px 25px;
   height: 100%;
   width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, min-content) 1fr;
+  gap: 15px;
 }
+.icon-container {
+  margin-top: 10px;
+}
+.current-temp {
+  display: flex;
+  align-items: flex-start;
+}
+.current-temp h1 {
+  margin: 0px;
+  margin-top: -5px;
+  font-size: 70px;
+  font-weight: 800;
+}
+.current-weather-display button {
+  background-color: transparent;
+  border: none;
+  padding: 0px 4px;
+  color: var(--main-font-color);
+  font-size: 18px;
+  font-weight: 400;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serifs;
+}
+.current-weather-display .spacer {
+  background-color: var(--light-font-color);
+  height: 20px;
+  width: 2px;
+  border-radius: 10px;
+}
+.view-selection {
+  grid-column: 1/-1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  align-self: flex-end;
+}
+.view-selection .spacer {
+  height: 25px;
+}
+.view-selection button {
+  font-size: 24px;
+  padding: 5px;
+  margin-left: -5px;
+  border-bottom: solid 4px transparent;
+  color: var(--secondary-font-color);
+}
+.view-selection button.active {
+  border-color: var(--accent-color);
+  color: var(--main-font-color);
+}
+.unit-switch-div {
+  display: flex;
+  align-items: center;
+  margin-top: 12px;
+}
+.weather-details {
+  margin-top: 10px;
+}
+.current-weather-display .dim {
+  color: var(--light-font-color);
+}
+/* Location display container ======================================================= */
 .location-display {
   /* background-color: aquamarine; */
   box-sizing: border-box;
@@ -43,8 +129,44 @@ h2 {
   justify-items: flex-end;
   text-align: right;
   grid-auto-rows: min-content;
+  /* gap: 5px; */
+}
+form {
+  height: fit-content;
+  width: calc(100% - 45px);
+  max-width: 300px;
+  color: var(--main-font-color);
+  border-radius: 5px;
+  display: grid;
+  grid-auto-rows: min-content;
   gap: 5px;
 }
+input {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  outline: none;
+  border: none;
+  height: max-content;
+  border: solid 1.5px var(--extra-light-accent);
+  border-radius: 25px;
+  padding: 10px 20px;
+  margin-top: 25px;
+  margin-bottom: 3px;
+  background-color: rgba(255, 255, 255, 0.75);
+  color: var(--main-font-color);
+}
+input::placeholder {
+  color: var(--light-font-color);
+}
+input:focus {
+  background-color: rgba(255, 255, 255, 0.75);
+  border-color: var(--light-accent);
+}
+input:focus::placeholder {
+  visibility: hidden;
+}
+/* Forecast graph ================================================================== */
 .forecast-graph {
   /* background-color: beige; */
   grid-column: 1/-1;
@@ -60,32 +182,4 @@ h2 {
   padding: 25px;
   height: 100%;
   width: 100%;
-}
-/* Form styling =============================================================== */
-form {
-  height: fit-content;
-  width: 100%;
-  color: var(--main-font-color);
-  border-radius: 5px;
-  display: grid;
-  grid-auto-rows: min-content;
-  gap: 5px;
-}
-/* label {
-  justify-self: center;
-  font-weight: 900;
-  font-size: 18px;
-} */
-input {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  font-size: 18px;
-  font-weight: 400;
-  outline: none;
-  border: none;
-  height: max-content;
-  border-radius: 7.5px;
-  padding: 10px 20px;
-  margin-top: 25px;
-  background-color: rgba(255, 255, 255, 0.6);
-  color: var(--main-font-color);
 }

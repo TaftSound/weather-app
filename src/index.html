@@ -8,15 +8,37 @@
   <link rel="stylesheet" href="./style.css">
 </head>
 <body>
+  <div class="overlay"></div>
   <div class="current-weather-display">
-
+    <div class="icon-container">
+      <img src="" id="current-weather-icon" alt="Current weather icon">
+    </div>
+    <div class="current-temp">
+      <h1>69</h1>
+      <div class="unit-switch-div">
+        <button id="farenheight-button">°F</button>
+        <div class="spacer"></div>
+        <button id="celsius-button" class="dim">°C</button>
+      </div>
+    </div>
+    <div class="weather-details">
+      <h3 id="current-precipitation">Precipitation: </h2>
+      <h3 id="current-humidity">Humidity: </h2>
+      <h3 id="current-wind">Wind: </h2>
+    </div>
+    <div class="view-selection">
+      <button id="temperature" class="active">Temperature</button>
+      <div class="spacer"></div>
+      <button id="precipitation">Precipitation</button>
+      <div class="spacer"></div>
+      <button id="wind">Wind</button>
+    </div>
   </div>
   <div class="location-display">
     <h1 class="city">San Diego, California, US</h1>
     <h2 class="date">Sunday, Oct 9th</h2>
     <h2 class="weather-description">Mostly sunny</h2>
     <form action="get">
-      <!-- <label for="search">Search City:</label> -->
       <input type="text" id="search" name="search" placeholder="Enter city..." required>
     </form>
   </div>
