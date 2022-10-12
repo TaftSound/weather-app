@@ -198,16 +198,40 @@ circle {
 path {
   stroke: var(--accent-color);
 }
-
-
-
+/* Forecast details ================================================================== */
 .forecast-details {
   /* background-color: brown; */
   grid-column: 1/-1;
   box-sizing: border-box;
-  padding: 25px 0px;
+  padding: 15px 0px;
   height: 100%;
   width: 100%;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  
+}
+.forecast-details h2 {
+  color: var(--main-font-color);
+}
+.day-forecast-div {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.forecast-details .spacer {
+  background-color: var(--light-font-color);
+  height: 20px;
+  width: 2px;
+  border-radius: 10px;
+}
+.high {
+  color: var(--main-font-color);
+}
+.day-details-div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
 }
