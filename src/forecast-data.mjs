@@ -51,12 +51,17 @@ async function getWeatherForecast () {
   }
 }
 
-const retrieveForecastData = async (inputElement) => {
-  getFormValue(inputElement)
-  await getPreciseLocation()
+export const setLocation = (lat, lon) => {
+  latitude = lat
+  longitude = lon
+}
+
+export const retrieveForecastData = async (inputElement) => {
+  if (inputElement) {
+    getFormValue(inputElement)
+    await getPreciseLocation()
+  }
   const currentWeatherObject = await getCurrentWeather()
   const weatherForecastObject = await getWeatherForecast()
   return [currentWeatherObject, weatherForecastObject]
 }
-
-export default retrieveForecastData
