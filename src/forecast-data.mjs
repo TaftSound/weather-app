@@ -51,7 +51,6 @@ function processCurrentWeatherData (dataObject) {
 }
 function createIconUrl (iconKey) {
   return `http://openweathermap.org/img/wn/${iconKey}@4x.png`
-  // return 'http://openweathermap.org/img/wn/10d@4x.png'
 }
 
 async function getWeatherForecast () {
