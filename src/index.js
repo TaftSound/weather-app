@@ -1,5 +1,6 @@
 import { retrieveForecastData, setLocation } from './forecast-data.mjs'
-import { setCurrentWeather } from './dom-manipulation.mjs'
+import { setCurrentWeather, getSearchValue } from './dom-manipulation.mjs'
+import { searchForLocation, getLocationName } from './geocoding.mjs'
 
 let currentWeatherObject
 let weatherForecastObject
@@ -9,9 +10,45 @@ listenForPermissionsChange()
 listenForSearchInput()
 // setCurrentWeather()
 
-async function getWeatherForecast (searchInput) {
+function listenForPermissionsChange () {
+  navigator.permissions.query({ name: 'geolocation' })
+    .then((result) => {
+      result.onchange = () => {
+        getUserWeather()
+      }
+    })
+}
+
+function listenForSearchInput () {
+  const searchInput = document.querySelector('input')
+  searchInput.addEventListener('keypress', async (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault()
+      const searchValue = getSearchValue(searchInput)
+      const latAndLong = await searchForLocation(searchValue)
+      getWeatherForecast(latAndLong[0], latAndLong[1])
+    }
+  })
+}
+
+function getUserWeather () {
+  getUserLocation()
+    .then(() => { getWeatherForecast() })
+    .catch((error) => { handleError(error) })
+}
+
+function handleError (error) {
+  if (error.message === 'User denied Geolocation') {
+    console.log('User denied geolocation')
+  } else {
+    alert(error.message)
+    console.log(error)
+  }
+}
+
+async function getWeatherForecast (lat, lon) {
   try {
-    const result = await retrieveForecastData(searchInput)
+    const result = await retrieveForecastData(lat, lon)
     currentWeatherObject = result[0]
     weatherForecastObject = result[1]
     setCurrentWeather(
@@ -41,42 +78,8 @@ async function getUserLocation () {
   }
 }
 
-function getUserWeather () {
-  getUserLocation()
-    .then(() => { getWeatherForecast() })
-    .catch((error) => { handleError(error) })
-}
-
-function handleError (error) {
-  if (error.message === 'User denied Geolocation') {
-    console.log('User denied geolocation')
-  } else {
-    alert(error.message)
-    console.log(error)
-  }
-}
-
 function requestGeolocation () {
   return new Promise(function (resolve, reject) {
     navigator.geolocation.getCurrentPosition(resolve, reject)
-  })
-}
-
-function listenForPermissionsChange () {
-  navigator.permissions.query({ name: 'geolocation' })
-    .then((result) => {
-      result.onchange = () => {
-        getUserWeather()
-      }
-    })
-}
-
-function listenForSearchInput () {
-  const searchInput = document.querySelector('input')
-  searchInput.addEventListener('keypress', async (event) => {
-    if (event.key === 'Enter') {
-      event.preventDefault()
-      getWeatherForecast(searchInput)
-    }
   })
 }
