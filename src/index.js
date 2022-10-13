@@ -1,4 +1,5 @@
 import { retrieveForecastData, setLocation } from './forecast-data.mjs'
+import { setCurrentWeather } from './dom-manipulation.mjs'
 
 let currentWeatherObject
 let weatherForecastObject
@@ -6,13 +7,26 @@ let weatherForecastObject
 getUserWeather()
 listenForPermissionsChange()
 listenForSearchInput()
+// setCurrentWeather()
 
 async function getWeatherForecast (searchInput) {
-  const result = await retrieveForecastData(searchInput)
-  currentWeatherObject = result[0]
-  weatherForecastObject = result[1]
-  console.log(currentWeatherObject)
-  console.log(weatherForecastObject)
+  try {
+    const result = await retrieveForecastData(searchInput)
+    currentWeatherObject = result[0]
+    weatherForecastObject = result[1]
+    setCurrentWeather(
+      currentWeatherObject.temp,
+      currentWeatherObject.feelsLike,
+      currentWeatherObject.humidity,
+      currentWeatherObject.wind,
+      currentWeatherObject.description,
+      currentWeatherObject.iconUrl
+    )
+    console.log(currentWeatherObject)
+    console.log(weatherForecastObject)
+  } catch (error) {
+    return error
+  }
 }
 
 async function getUserLocation () {

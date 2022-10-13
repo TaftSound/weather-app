@@ -11,10 +11,10 @@
   <div class="overlay"></div>
   <div class="current-weather-display">
     <div class="icon-container">
-      <img src="" id="current-weather-icon" alt="Current weather icon">
+      <img src="" id="current-weather-icon" alt="Current weather icon" height="160px">
     </div>
     <div class="current-temp">
-      <h1>69</h1>
+      <h1 id="current-temperature">69</h1>
       <div class="unit-switch-div">
         <button id="farenheight-button">°F</button>
         <div class="spacer"></div>
@@ -22,7 +22,7 @@
       </div>
     </div>
     <div class="weather-details">
-      <h3 id="current-precipitation">Precipitation: </h2>
+      <h3 id="feels-like">Feels like: </h2>
       <h3 id="current-humidity">Humidity: </h2>
       <h3 id="current-wind">Wind: </h2>
     </div>
@@ -37,7 +37,7 @@
   <div class="location-display">
     <h1 class="city">San Diego, California, US</h1>
     <h2 class="date">Sunday, Oct 9th</h2>
-    <h2 class="weather-description">Mostly sunny</h2>
+    <h2 id="weather-description">Mostly sunny</h2>
     <form action="get">
       <input type="text" id="search" name="search" placeholder="Enter city..." required>
     </form>
