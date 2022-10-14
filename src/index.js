@@ -10,13 +10,13 @@ listenForSearchInput()
 
 async function renderUserLocationWeather () {
   getUserLocation()
-    .then(() => renderWeatherForecast(getLat(), getLon()))
+    .then(() => renderWeatherForecast())
     .catch((error) => handleError(error))
 }
 
-async function renderWeatherForecast (lat, lon) { // lat and lon optional
+async function renderWeatherForecast () { // lat and lon optional
   try {
-    const weatherObject = await retrieveForecastData(lat, lon)
+    const weatherObject = await retrieveForecastData(getLat(), getLon())
     const locationName = getLocationName()
     displayCurrentLocation(locationName)
     displayCurrentWeather(weatherObject[0])
@@ -40,7 +40,7 @@ function listenForSearchInput () {
     if (event.key === 'Enter') {
       event.preventDefault()
       searchForLocation(getSearchValue())
-        .then(() => renderWeatherForecast(getLat(), getLon()))
+        .then(() => renderWeatherForecast())
         .catch((error) => handleError(error))
     }
   })
