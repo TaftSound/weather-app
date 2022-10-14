@@ -4,7 +4,15 @@ const feelsLike = document.getElementById('feels-like')
 const currentHumidity = document.getElementById('current-humidity')
 const currentWind = document.getElementById('current-wind')
 const currentWeatherDescription = document.getElementById('weather-description')
+
 const currentLocation = document.getElementById('location')
+const currentDate = document.getElementById('date')
+const dayTwo = document.getElementById('day-two').firstElementChild
+const dayThree = document.getElementById('day-three').firstElementChild
+const dayFour = document.getElementById('day-four').firstElementChild
+const dayFive = document.getElementById('day-five').firstElementChild
+const daySix = document.getElementById('day-six').firstElementChild
+
 const searchInput = document.getElementById('search')
 
 export function getSearchValue () {
@@ -29,6 +37,14 @@ export function displayCurrentWeather (weatherObject) {
 
 export function displayCurrentLocation (locationName) {
   currentLocation.textContent = locationName
+}
+export function displayDays (dateString, upcomingDaysArray) {
+  currentDate.textContent = dateString
+  dayTwo.textContent = upcomingDaysArray[0]
+  dayThree.textContent = upcomingDaysArray[1]
+  dayFour.textContent = upcomingDaysArray[2]
+  dayFive.textContent = upcomingDaysArray[3]
+  daySix.textContent = upcomingDaysArray[4]
 }
 
 function capFirstLetter (string) {

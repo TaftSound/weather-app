@@ -16,7 +16,8 @@ function processCurrentWeatherData (dataObject) {
   const wind = Math.round(dataObject.wind.speed)
   const description = dataObject.weather[0].description
   const iconUrl = createIconUrl(dataObject.weather[0].icon)
-  return { temp, feelsLike, humidity, wind, description, iconUrl }
+  const localeDate = dataObject.dt
+  return { temp, feelsLike, humidity, wind, description, iconUrl, localeDate }
 }
 function createIconUrl (iconKey) {
   return `http://openweathermap.org/img/wn/${iconKey}@4x.png`

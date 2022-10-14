@@ -1,8 +1,12 @@
 import { retrieveForecastData } from './forecast-data.mjs'
-import { displayCurrentWeather, displayCurrentLocation, getSearchValue } from './dom-manipulation.mjs'
 import { searchForLocation, getUserLocation, getLocationName, getLat, getLon } from './geocoding.mjs'
-
-// listenForSearchInput()
+import { getCurrentDate, getNextDays, setLocaleDate } from './date-data.mjs'
+import {
+  displayCurrentWeather,
+  displayCurrentLocation,
+  displayDays,
+  getSearchValue
+} from './dom-manipulation.mjs'
 
 renderUserLocationWeather()
 listenForPermissionsChange()
@@ -14,11 +18,13 @@ async function renderUserLocationWeather () {
     .catch((error) => handleError(error))
 }
 
-async function renderWeatherForecast () { // lat and lon optional
+async function renderWeatherForecast () {
   try {
     const weatherObject = await retrieveForecastData(getLat(), getLon())
     const locationName = getLocationName()
     displayCurrentLocation(locationName)
+    setLocaleDate(weatherObject[0])
+    displayDays(getCurrentDate(), getNextDays())
     displayCurrentWeather(weatherObject[0])
   } catch (error) {
     return error
