@@ -4,11 +4,13 @@ const feelsLike = document.getElementById('feels-like')
 const currentHumidity = document.getElementById('current-humidity')
 const currentWind = document.getElementById('current-wind')
 const currentWeatherDescription = document.getElementById('weather-description')
+const currentLocation = document.getElementById('location')
+const searchInput = document.getElementById('search')
 
-export function getSearchValue (inputElement) {
-  let searchValue = inputElement.value
+export function getSearchValue () {
+  let searchValue = searchInput.value
   searchValue = searchValue.replace(/\s+/g, '')
-  inputElement.value = ''
+  searchInput.value = ''
   const searchValueArray = searchValue.split(',')
   searchValue = searchValueArray[0]
   if (searchValueArray[1]) { searchValue += ',' + searchValueArray[1] + ',' }
@@ -16,13 +18,17 @@ export function getSearchValue (inputElement) {
   return searchValue
 }
 
-export function setCurrentWeather (temp, feelTemp, humidity, wind, description, iconUrl) {
-  currentTemp.textContent = `${temp}`
-  feelsLike.textContent = `Feels like: ${feelTemp}°`
-  currentHumidity.textContent = `Humidity: ${humidity}%`
-  currentWind.textContent = `Wind: ${wind} mph`
-  currentWeatherDescription.textContent = capFirstLetter(description)
-  currentWeatherIcon.src = iconUrl
+export function displayCurrentWeather (weatherObject) {
+  currentTemp.textContent = `${weatherObject.temp}`
+  feelsLike.textContent = `Feels like: ${weatherObject.feelsLike}°`
+  currentHumidity.textContent = `Humidity: ${weatherObject.humidity}%`
+  currentWind.textContent = `Wind: ${weatherObject.wind} mph`
+  currentWeatherDescription.textContent = capFirstLetter(weatherObject.description)
+  currentWeatherIcon.src = weatherObject.iconUrl
+}
+
+export function displayCurrentLocation (locationName) {
+  currentLocation.textContent = locationName
 }
 
 function capFirstLetter (string) {

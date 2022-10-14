@@ -1,10 +1,7 @@
 
-let latitude = ''
-let longitude = ''
-
-async function getCurrentWeather () {
+async function getCurrentWeather (lat, lon) {
   try {
-    const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=imperial&appid=c48bcffd61ca0ded777af3c42746942e`, { mode: 'cors' })
+    const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=imperial&appid=c48bcffd61ca0ded777af3c42746942e`, { mode: 'cors' })
     const currentWeatherObject = await response.json()
     return processCurrentWeatherData(currentWeatherObject)
   } catch (error) {
@@ -25,9 +22,9 @@ function createIconUrl (iconKey) {
   return `http://openweathermap.org/img/wn/${iconKey}@4x.png`
 }
 
-async function getWeatherForecast () {
+async function getWeatherForecast (lat, lon) {
   try {
-    const response = await fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&units=imperial&appid=c48bcffd61ca0ded777af3c42746942e`, { mode: 'cors' })
+    const response = await fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=imperial&appid=c48bcffd61ca0ded777af3c42746942e`, { mode: 'cors' })
     const weatherForecastObject = await response.json()
     return weatherForecastObject
   } catch (error) {
@@ -36,17 +33,8 @@ async function getWeatherForecast () {
   }
 }
 
-export const setLocation = (lat, lon) => {
-  latitude = lat
-  longitude = lon
-}
-
 export const retrieveForecastData = async (lat, lon) => {
-  if (lat && lon) {
-    latitude = lat
-    longitude = lon
-  }
-  const currentWeatherObject = await getCurrentWeather()
-  const weatherForecastObject = await getWeatherForecast()
+  const currentWeatherObject = await getCurrentWeather(lat, lon)
+  const weatherForecastObject = await getWeatherForecast(lat, lon)
   return [currentWeatherObject, weatherForecastObject]
 }

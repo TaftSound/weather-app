@@ -1,20 +1,35 @@
-import { retrieveForecastData, setLocation } from './forecast-data.mjs'
-import { setCurrentWeather, getSearchValue } from './dom-manipulation.mjs'
-import { searchForLocation, getLocationName } from './geocoding.mjs'
+import { retrieveForecastData } from './forecast-data.mjs'
+import { displayCurrentWeather, displayCurrentLocation, getSearchValue } from './dom-manipulation.mjs'
+import { searchForLocation, getUserLocation, getLocationName, getLat, getLon } from './geocoding.mjs'
 
-let currentWeatherObject
-let weatherForecastObject
+// listenForSearchInput()
 
-getUserWeather()
+renderUserLocationWeather()
 listenForPermissionsChange()
 listenForSearchInput()
-// setCurrentWeather()
+
+async function renderUserLocationWeather () {
+  getUserLocation()
+    .then(() => renderWeatherForecast(getLat(), getLon()))
+    .catch((error) => handleError(error))
+}
+
+async function renderWeatherForecast (lat, lon) { // lat and lon optional
+  try {
+    const weatherObject = await retrieveForecastData(lat, lon)
+    const locationName = getLocationName()
+    displayCurrentLocation(locationName)
+    displayCurrentWeather(weatherObject[0])
+  } catch (error) {
+    return error
+  }
+}
 
 function listenForPermissionsChange () {
   navigator.permissions.query({ name: 'geolocation' })
     .then((result) => {
       result.onchange = () => {
-        getUserWeather()
+        renderUserLocationWeather()
       }
     })
 }
@@ -24,17 +39,11 @@ function listenForSearchInput () {
   searchInput.addEventListener('keypress', async (event) => {
     if (event.key === 'Enter') {
       event.preventDefault()
-      const searchValue = getSearchValue(searchInput)
-      const latAndLong = await searchForLocation(searchValue)
-      getWeatherForecast(latAndLong[0], latAndLong[1])
+      searchForLocation(getSearchValue())
+        .then(() => renderWeatherForecast(getLat(), getLon()))
+        .catch((error) => handleError(error))
     }
   })
-}
-
-function getUserWeather () {
-  getUserLocation()
-    .then(() => { getWeatherForecast() })
-    .catch((error) => { handleError(error) })
 }
 
 function handleError (error) {
@@ -44,42 +53,4 @@ function handleError (error) {
     alert(error.message)
     console.log(error)
   }
-}
-
-async function getWeatherForecast (lat, lon) {
-  try {
-    const result = await retrieveForecastData(lat, lon)
-    currentWeatherObject = result[0]
-    weatherForecastObject = result[1]
-    setCurrentWeather(
-      currentWeatherObject.temp,
-      currentWeatherObject.feelsLike,
-      currentWeatherObject.humidity,
-      currentWeatherObject.wind,
-      currentWeatherObject.description,
-      currentWeatherObject.iconUrl
-    )
-    console.log(currentWeatherObject)
-    console.log(weatherForecastObject)
-  } catch (error) {
-    return error
-  }
-}
-
-async function getUserLocation () {
-  try {
-    const positionPromise = await requestGeolocation()
-    const latitude = positionPromise.coords.latitude
-    const longitude = positionPromise.coords.longitude
-    setLocation(latitude, longitude)
-    return
-  } catch (error) {
-    return Promise.reject(error)
-  }
-}
-
-function requestGeolocation () {
-  return new Promise(function (resolve, reject) {
-    navigator.geolocation.getCurrentPosition(resolve, reject)
-  })
 }
