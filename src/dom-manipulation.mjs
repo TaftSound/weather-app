@@ -40,7 +40,7 @@ export function displayWeatherForecast (weatherObject) {
     let highNumber = 0
     let lowNumber = 1000
     const currentDayData = weatherObject[i]
-    const currentDayIcon = dayDivArray[i].firstElementChild.nextElementSibling
+    const currentDayIcon = dayDivArray[i].firstElementChild.nextElementSibling.firstElementChild
     const currentDayHigh = dayDivArray[i].lastElementChild.firstElementChild
     const currentDayLow = dayDivArray[i].lastElementChild.lastElementChild
     for (let j = 0; j < currentDayData.length; j++) {
