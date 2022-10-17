@@ -7,11 +7,12 @@ const currentWeatherDescription = document.getElementById('weather-description')
 
 const currentLocation = document.getElementById('location')
 const currentDate = document.getElementById('date')
-const dayTwo = document.getElementById('day-two').firstElementChild
-const dayThree = document.getElementById('day-three').firstElementChild
-const dayFour = document.getElementById('day-four').firstElementChild
-const dayFive = document.getElementById('day-five').firstElementChild
-const daySix = document.getElementById('day-six').firstElementChild
+const dayOneDiv = document.getElementById('day-one')
+const dayTwoDiv = document.getElementById('day-two')
+const dayThreeDiv = document.getElementById('day-three')
+const dayFourDiv = document.getElementById('day-four')
+const dayFiveDiv = document.getElementById('day-five')
+const dayDivArray = [dayOneDiv, dayTwoDiv, dayThreeDiv, dayFourDiv, dayFiveDiv]
 
 const searchInput = document.getElementById('search')
 
@@ -34,17 +35,32 @@ export function displayCurrentWeather (weatherObject) {
   currentWeatherDescription.textContent = capFirstLetter(weatherObject.description)
   currentWeatherIcon.src = weatherObject.iconUrl
 }
+export function displayWeatherForecast (weatherObject) {
+  for (let i = 0; i < 5; i++) {
+    let highNumber = 0
+    let lowNumber = 1000
+    const currentDayData = weatherObject[i]
+    const currentDayIcon = dayDivArray[i].firstElementChild.nextElementSibling
+    const currentDayHigh = dayDivArray[i].lastElementChild.firstElementChild
+    const currentDayLow = dayDivArray[i].lastElementChild.lastElementChild
+    for (let j = 0; j < currentDayData.length; j++) {
+      if (currentDayData[j].iconUrl) { currentDayIcon.src = currentDayData[j].iconUrl }
+      if (currentDayData[j].temp > highNumber) { highNumber = currentDayData[j].temp }
+      if (currentDayData[j].temp < lowNumber) { lowNumber = currentDayData[j].temp }
+    }
+    currentDayHigh.textContent = `${Math.round(highNumber)}°`
+    currentDayLow.textContent = `${Math.round(lowNumber)}°`
+  }
+}
 
 export function displayCurrentLocation (locationName) {
   currentLocation.textContent = locationName
 }
 export function displayDays (dateString, upcomingDaysArray) {
   currentDate.textContent = dateString
-  dayTwo.textContent = upcomingDaysArray[0]
-  dayThree.textContent = upcomingDaysArray[1]
-  dayFour.textContent = upcomingDaysArray[2]
-  dayFive.textContent = upcomingDaysArray[3]
-  daySix.textContent = upcomingDaysArray[4]
+  for (let i = 0; i < 5; i++) {
+    dayDivArray[i].firstElementChild.textContent = upcomingDaysArray[i]
+  }
 }
 
 function capFirstLetter (string) {
