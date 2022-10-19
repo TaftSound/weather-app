@@ -4,9 +4,12 @@ const feelsLike = document.getElementById('feels-like')
 const currentHumidity = document.getElementById('current-humidity')
 const currentWind = document.getElementById('current-wind')
 const currentWeatherDescription = document.getElementById('weather-description')
-
 const currentLocation = document.getElementById('location')
 const currentDate = document.getElementById('date')
+
+const graphLine = document.getElementById('graph-line')
+const dotPathContainer = document.getElementById('dot-path-container')
+
 const dayOneDiv = document.getElementById('day-one')
 const dayTwoDiv = document.getElementById('day-two')
 const dayThreeDiv = document.getElementById('day-three')
@@ -36,21 +39,24 @@ export function displayCurrentWeather (weatherObject) {
   currentWeatherIcon.src = weatherObject.iconUrl
 }
 export function displayWeatherForecast (weatherObject) {
-  for (let i = 0; i < 5; i++) {
-    let highNumber = 0
-    let lowNumber = 1000
-    const currentDayData = weatherObject[i]
-    const currentDayIcon = dayDivArray[i].firstElementChild.nextElementSibling.firstElementChild
-    const currentDayHigh = dayDivArray[i].lastElementChild.firstElementChild
-    const currentDayLow = dayDivArray[i].lastElementChild.lastElementChild
-    for (let j = 0; j < currentDayData.length; j++) {
-      if (currentDayData[j].iconUrl) { currentDayIcon.src = currentDayData[j].iconUrl }
-      if (currentDayData[j].temp > highNumber) { highNumber = currentDayData[j].temp }
-      if (currentDayData[j].temp < lowNumber) { lowNumber = currentDayData[j].temp }
-    }
-    currentDayHigh.textContent = `${Math.round(highNumber)}°`
-    currentDayLow.textContent = `${Math.round(lowNumber)}°`
+  const fiveDayData = weatherObject.fiveDayData
+  console.log(fiveDayData)
+  console.log(weatherObject)
+  for (const day in fiveDayData) {
+    const currentDayIcon = dayDivArray[day].firstElementChild.nextElementSibling.firstElementChild
+    const currentDayHigh = dayDivArray[day].lastElementChild.firstElementChild
+    const currentDayLow = dayDivArray[day].lastElementChild.lastElementChild
+    currentDayIcon.src = fiveDayData[day].iconUrl
+    currentDayHigh.textContent = `${Math.round(fiveDayData[day].highTemp)}°`
+    currentDayLow.textContent = `${Math.round(fiveDayData[day].lowTemp)}°`
   }
+}
+
+export function displayForecastGraph (dataObject) {
+  graphLine.setAttribute('d', 'M -12.5 13 L 0 0 L 12.5 2 L 25 50 L 37.5 10 L 50 100 L 62.5 0 L 75 2 L 87.5 50 L 100 10 L 112.5 100')
+  const dAttribute = graphLine.getAttribute('d')
+  // console.log(dAttribute)
+  // console.log(dotPathContainer.children)
 }
 
 export function displayCurrentLocation (locationName) {

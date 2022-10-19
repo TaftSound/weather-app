@@ -5,6 +5,7 @@ import {
   displayCurrentWeather,
   displayWeatherForecast,
   displayCurrentLocation,
+  displayForecastGraph,
   displayDays,
   getSearchValue
 } from './dom-manipulation.mjs'
@@ -12,6 +13,7 @@ import {
 renderUserLocationWeather()
 listenForPermissionsChange()
 listenForSearchInput()
+displayForecastGraph()
 
 async function renderUserLocationWeather () {
   getUserLocation()

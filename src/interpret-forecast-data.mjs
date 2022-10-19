@@ -1,27 +1,36 @@
 let timeZone
 
-function interpretEachDayData (dataObject) {
+function interpretData (dataObject) {
   const dayOrNight = dataObject[0][0].sys.pod
   console.log(dayOrNight)
-  for (const day in dataObject) {
+  const firstDayLength = dataObject[0].length
+  const fiveDayData = []
+  const graphData = []
+  for (let i = 0; i < 6; i++) {
     let needIcon = true
-    const currentDayArray = dataObject[day]
+    const currentDayArray = dataObject[i]
+    let highTemp = 0
+    let lowTemp = 1000
+    let iconUrl = false
     for (let j = 0; j < currentDayArray.length; j++) {
       const currentReport = currentDayArray[j]
-      let iconUrl = false
       if (needIcon) {
         if (currentReport.sys.pod === dayOrNight) {
           iconUrl = createIconUrl(currentReport.weather[0].icon)
           needIcon = false
         }
       }
+      if (currentReport.main.temp > highTemp) { highTemp = currentReport.main.temp }
+      if (currentReport.main.temp < lowTemp) { lowTemp = currentReport.main.temp }
       const temp = currentReport.main.temp
-      const humidity = currentReport.main.humidity
       const wind = currentReport.wind.speed
       const precipitation = currentReport.pop
-      currentDayArray[j] = { temp, humidity, wind, precipitation, iconUrl }
+      graphData.push({ temp, wind, precipitation })
     }
+    if (i === 5) { continue }
+    fiveDayData[i] = { highTemp, lowTemp, iconUrl }
   }
+  return { fiveDayData, graphData, firstDayLength }
 }
 
 function createIconUrl (iconKey) {
@@ -58,7 +67,5 @@ export function parseWeatherForecastData (dataObject) {
     }
     fiveDayData[dayNumber].push(currentReport)
   }
-  interpretEachDayData(fiveDayData)
-  console.log(fiveDayData)
-  return fiveDayData
+  return interpretData(fiveDayData)
 }
