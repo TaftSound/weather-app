@@ -36,7 +36,9 @@ export function displayCurrentWeather (weatherObject) {
   currentHumidity.textContent = `Humidity: ${weatherObject.humidity}%`
   currentWind.textContent = `Wind: ${weatherObject.wind} mph`
   currentWeatherDescription.textContent = capFirstLetter(weatherObject.description)
+  const dayOneIcon = dayOneDiv.firstElementChild.nextElementSibling.firstElementChild
   currentWeatherIcon.src = weatherObject.iconUrl
+  dayOneIcon.src = weatherObject.iconUrl
 }
 export function displayWeatherForecast (weatherObject) {
   const fiveDayData = weatherObject.fiveDayData
@@ -46,9 +48,10 @@ export function displayWeatherForecast (weatherObject) {
     const currentDayIcon = dayDivArray[day].firstElementChild.nextElementSibling.firstElementChild
     const currentDayHigh = dayDivArray[day].lastElementChild.firstElementChild
     const currentDayLow = dayDivArray[day].lastElementChild.lastElementChild
-    currentDayIcon.src = fiveDayData[day].iconUrl
     currentDayHigh.textContent = `${Math.round(fiveDayData[day].highTemp)}°`
     currentDayLow.textContent = `${Math.round(fiveDayData[day].lowTemp)}°`
+    if (!fiveDayData[day].iconUrl) { continue }
+    currentDayIcon.src = fiveDayData[day].iconUrl
   }
 }
 

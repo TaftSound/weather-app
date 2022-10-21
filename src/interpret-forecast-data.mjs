@@ -1,36 +1,73 @@
 let timeZone
 
 function interpretData (dataObject) {
-  const dayOrNight = dataObject[0][0].sys.pod
-  console.log(dayOrNight)
-  const firstDayLength = dataObject[0].length
-  const fiveDayData = []
+  let firstDayLength = dataObject[0].length
+  if (firstDayLength === 8) { firstDayLength = 0 }
+  const fiveDayData = interpretFiveDayData(dataObject)
+  const graphData = interpretGraphData(dataObject, fiveDayData)
+  return { fiveDayData, graphData, firstDayLength }
+}
+function interpretGraphData (dataObject, fiveDayData) {
   const graphData = []
-  for (let i = 0; i < 6; i++) {
-    let needIcon = true
-    const currentDayArray = dataObject[i]
+  const minMaxQuotients = getMinMaxQuotients(dataObject, fiveDayData)
+  for (const day in dataObject) {
+    for (const time in dataObject[day]) {
+      const temp = dataObject[day][time].main.temp
+      const wind = dataObject[day][time].wind.speed
+      const precipitation = dataObject[day][time].pop
+      const precipY = precipitation
+      const tempY = (temp - minMaxQuotients.lowTemp) * minMaxQuotients.tempQuotient
+      const windY = (wind - minMaxQuotients.lowWind) * minMaxQuotients.windQuotient
+      graphData.push({ temp, wind, precipitation, tempY, windY, precipY })
+    }
+  }
+  return graphData
+}
+function getMinMaxQuotients (dataObject, fiveDayData) {
+  let highTemp = 0
+  let lowTemp = 1000
+  let highWind = 0
+  let lowWind = 1000
+  for (const day in fiveDayData) {
+    if (fiveDayData[day].highTemp > highTemp) { highTemp = fiveDayData[day].highTemp }
+    if (fiveDayData[day].lowTemp < lowTemp) { lowTemp = fiveDayData[day].lowTemp }
+  }
+  for (const day in dataObject) {
+    for (const time in dataObject[day]) {
+      if (dataObject[day][time].wind.speed > highWind) { highWind = dataObject[day][time].wind.speed }
+      if (dataObject[day][time].wind.speed < lowWind) { lowWind = dataObject[day][time].wind.speed }
+    }
+  }
+  const tempDifference = highTemp - lowTemp
+  const windDifference = highWind - lowWind
+  const tempQuotient = 100 / tempDifference
+  const windQuotient = 100 / windDifference
+  return { tempQuotient, windQuotient, lowTemp, lowWind }
+}
+function interpretFiveDayData (dataObject) {
+  const fiveDayData = []
+  for (const day in dataObject) {
+    if (+day === 5) { continue }
     let highTemp = 0
     let lowTemp = 1000
     let iconUrl = false
-    for (let j = 0; j < currentDayArray.length; j++) {
-      const currentReport = currentDayArray[j]
-      if (needIcon) {
-        if (currentReport.sys.pod === dayOrNight) {
-          iconUrl = createIconUrl(currentReport.weather[0].icon)
-          needIcon = false
-        }
-      }
+    for (const time in dataObject[day]) {
+      const currentReport = dataObject[day][time]
       if (currentReport.main.temp > highTemp) { highTemp = currentReport.main.temp }
       if (currentReport.main.temp < lowTemp) { lowTemp = currentReport.main.temp }
-      const temp = currentReport.main.temp
-      const wind = currentReport.wind.speed
-      const precipitation = currentReport.pop
-      graphData.push({ temp, wind, precipitation })
+      if (+day === 0) { continue }
+      if (!iconUrl) { iconUrl = getIconUrl(currentReport) }
     }
-    if (i === 5) { continue }
-    fiveDayData[i] = { highTemp, lowTemp, iconUrl }
+    fiveDayData[day] = { highTemp, lowTemp, iconUrl }
   }
-  return { fiveDayData, graphData, firstDayLength }
+  return fiveDayData
+}
+
+function getIconUrl (currentReport) {
+  if (currentReport.sys.pod === 'd') {
+    return createIconUrl(currentReport.weather[0].icon)
+  }
+  return false
 }
 
 function createIconUrl (iconKey) {
