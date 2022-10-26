@@ -8,7 +8,10 @@ const currentLocation = document.getElementById('location')
 const currentDate = document.getElementById('date')
 
 const graphLine = document.getElementById('graph-line')
-const dotPathContainer = document.getElementById('dot-path-container')
+const textPathChildren = document.getElementById('text-container').children
+const temperatureButton = document.getElementById('temperature')
+const precipButton = document.getElementById('precipitation')
+const windButton = document.getElementById('wind')
 
 const dayOneDiv = document.getElementById('day-one')
 const dayTwoDiv = document.getElementById('day-two')
@@ -56,10 +59,16 @@ export function displayWeatherForecast (weatherObject) {
 }
 
 export function displayForecastGraph (dataObject) {
-  graphLine.setAttribute('d', 'M -12.5 13 L 0 0 L 12.5 2 L 25 50 L 37.5 10 L 50 100 L 62.5 0 L 75 2 L 87.5 50 L 100 10 L 112.5 100')
-  const dAttribute = graphLine.getAttribute('d')
-  // console.log(dAttribute)
-  // console.log(dotPathContainer.children)
+  displayGraph(dataObject, 'temp', 'tempY')
+  temperatureButton.addEventListener('click', () => {
+    displayGraph(dataObject, 'temp', 'tempY')
+  })
+  precipButton.addEventListener('click', () => {
+    displayGraph(dataObject, 'precipitation', 'precipY')
+  })
+  windButton.addEventListener('click', () => {
+    displayGraph(dataObject, 'wind', 'windY')
+  })
 }
 
 export function displayCurrentLocation (locationName) {
@@ -69,6 +78,33 @@ export function displayDays (dateString, upcomingDaysArray) {
   currentDate.textContent = dateString
   for (let i = 0; i < 5; i++) {
     dayDivArray[i].firstElementChild.textContent = upcomingDaysArray[i]
+  }
+}
+
+function displayGraph (dataObject, propertyName, propertyY) {
+  const lineString = createGraphLineString(dataObject.graphData, propertyY)
+  placeGraphText(dataObject.graphData, propertyName, propertyY)
+  graphLine.setAttribute('d', lineString)
+
+  function createGraphLineString (graphDataObject, propertyName) {
+    let lineString = 'M -12.5 125 L -12.5 50'
+    for (const point in graphDataObject) {
+      const xValue = point * 12.5
+      const yValue = 100 - graphDataObject[point][propertyName]
+      lineString = lineString + ` L ${xValue} ${yValue}`
+    }
+    lineString = lineString + ' L 500 125'
+    return lineString
+  }
+  function placeGraphText (graphDataObject, propertyName, propertyY) {
+    for (const point in graphDataObject) {
+      const xValue = point * 12.5 - 1.5
+      const yValue = 93 - graphDataObject[point][propertyY]
+      const textValue = Math.round(graphDataObject[point][propertyName])
+      textPathChildren[point].setAttribute('x', `${xValue}%`)
+      textPathChildren[point].setAttribute('y', `${yValue}%`)
+      textPathChildren[point].textContent = textValue
+    }
   }
 }
 

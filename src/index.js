@@ -13,7 +13,6 @@ import {
 renderUserLocationWeather()
 listenForPermissionsChange()
 listenForSearchInput()
-displayForecastGraph()
 
 async function renderUserLocationWeather () {
   getUserLocation()
@@ -30,6 +29,7 @@ async function renderWeatherForecast () {
     displayDays(getCurrentDate(), getNextDays())
     displayCurrentWeather(weatherObject[0])
     displayWeatherForecast(weatherObject[1])
+    displayForecastGraph(weatherObject[1])
   } catch (error) {
     return error
   }
