@@ -45,8 +45,6 @@ export function displayCurrentWeather (weatherObject) {
 }
 export function displayWeatherForecast (weatherObject) {
   const fiveDayData = weatherObject.fiveDayData
-  console.log(fiveDayData)
-  console.log(weatherObject)
   for (const day in fiveDayData) {
     const currentDayIcon = dayDivArray[day].firstElementChild.nextElementSibling.firstElementChild
     const currentDayHigh = dayDivArray[day].lastElementChild.firstElementChild
@@ -56,19 +54,7 @@ export function displayWeatherForecast (weatherObject) {
     if (!fiveDayData[day].iconUrl) { continue }
     currentDayIcon.src = fiveDayData[day].iconUrl
   }
-}
-
-export function displayForecastGraph (dataObject) {
-  displayGraph(dataObject, 'temp', 'tempY')
-  temperatureButton.addEventListener('click', () => {
-    displayGraph(dataObject, 'temp', 'tempY')
-  })
-  precipButton.addEventListener('click', () => {
-    displayGraph(dataObject, 'precipitation', 'precipY')
-  })
-  windButton.addEventListener('click', () => {
-    displayGraph(dataObject, 'wind', 'windY')
-  })
+  displayForecastGraph(weatherObject)
 }
 
 export function displayCurrentLocation (locationName) {
@@ -81,29 +67,54 @@ export function displayDays (dateString, upcomingDaysArray) {
   }
 }
 
-function displayGraph (dataObject, propertyName, propertyY) {
-  const lineString = createGraphLineString(dataObject.graphData, propertyY)
-  placeGraphText(dataObject.graphData, propertyName, propertyY)
+function displayForecastGraph (dataObject) {
+  displayGraph(dataObject, 'temp', 'tempY', '°')
+  setActiveGraphButton(temperatureButton, '')
+  temperatureButton.addEventListener('click', () => {
+    displayGraph(dataObject, 'temp', 'tempY', '°')
+    setActiveGraphButton(temperatureButton, '')
+  })
+  precipButton.addEventListener('click', () => {
+    displayGraph(dataObject, 'precipitation', 'precipY', '%')
+    setActiveGraphButton(precipButton, 'precip-graph')
+  })
+  windButton.addEventListener('click', () => {
+    displayGraph(dataObject, 'wind', 'windY', 'mph')
+    setActiveGraphButton(windButton, 'wind-graph')
+  })
+}
+
+function setActiveGraphButton (button, graphLineClass) {
+  temperatureButton.className = ''
+  windButton.className = ''
+  precipButton.className = ''
+  button.className = 'active'
+  graphLine.setAttribute('class', graphLineClass)
+}
+
+function displayGraph (dataObject, propertyName, propertyY, descriptor) {
+  const lineString = createGraphLineString(dataObject.graphData)
+  placeGraphText(dataObject.graphData)
   graphLine.setAttribute('d', lineString)
 
-  function createGraphLineString (graphDataObject, propertyName) {
-    let lineString = 'M -12.5 125 L -12.5 50'
+  function createGraphLineString (graphDataObject) {
+    let lineString = 'M -12.5 125' + ` L -12.5 ${100 - graphDataObject[0][propertyY]}`
     for (const point in graphDataObject) {
       const xValue = point * 12.5
-      const yValue = 100 - graphDataObject[point][propertyName]
+      const yValue = 100 - graphDataObject[point][propertyY]
       lineString = lineString + ` L ${xValue} ${yValue}`
     }
     lineString = lineString + ' L 500 125'
     return lineString
   }
-  function placeGraphText (graphDataObject, propertyName, propertyY) {
+  function placeGraphText (graphDataObject) {
     for (const point in graphDataObject) {
       const xValue = point * 12.5 - 1.5
-      const yValue = 93 - graphDataObject[point][propertyY]
+      const yValue = 87 - graphDataObject[point][propertyY]
       const textValue = Math.round(graphDataObject[point][propertyName])
       textPathChildren[point].setAttribute('x', `${xValue}%`)
       textPathChildren[point].setAttribute('y', `${yValue}%`)
-      textPathChildren[point].textContent = textValue
+      textPathChildren[point].textContent = `${textValue}${descriptor}`
     }
   }
 }

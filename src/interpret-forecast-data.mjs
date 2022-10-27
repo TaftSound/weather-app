@@ -15,7 +15,7 @@ function interpretGraphData (dataObject, fiveDayData) {
       const temp = dataObject[day][time].main.temp
       const wind = dataObject[day][time].wind.speed
       const precipitation = dataObject[day][time].pop
-      const precipY = precipitation
+      const precipY = (precipitation / 10) * 9
       const tempY = (temp - minMaxQuotients.lowTemp) * minMaxQuotients.tempQuotient
       const windY = (wind - minMaxQuotients.lowWind) * minMaxQuotients.windQuotient
       graphData.push({ temp, wind, precipitation, tempY, windY, precipY })
@@ -40,8 +40,8 @@ function getMinMaxQuotients (dataObject, fiveDayData) {
   }
   const tempDifference = highTemp - lowTemp
   const windDifference = highWind - lowWind
-  const tempQuotient = 100 / tempDifference
-  const windQuotient = 100 / windDifference
+  const tempQuotient = 90 / tempDifference
+  const windQuotient = 90 / windDifference
   return { tempQuotient, windQuotient, lowTemp, lowWind }
 }
 function interpretFiveDayData (dataObject) {

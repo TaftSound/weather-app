@@ -4,6 +4,10 @@
   --light-font-color: rgb(155, 155, 175);
   --accent-color: rgb(235,110,76);
   --accent-color-transparent: rgb(235, 110, 76, 0.3);
+  --blue-accent-color: rgb(74, 94, 219);
+  --blue-accent-color-transparent: rgb(74, 94, 219, 0.3);
+  --teal-accent-color: rgb(74, 171, 219);
+  --teal-accent-color-transparent: rgb(74, 171, 219, 0.3);
   --light-accent: rgb(0, 0, 0, .2);
   --extra-light-accent: rgb(0, 0, 0, .075);
 }
@@ -123,8 +127,16 @@ h3 {
   cursor: pointer;
 }
 .view-selection button.active {
-  border-color: var(--accent-color);
   color: var(--main-font-color);
+}
+#temperature.active {
+  border-color: var(--accent-color);
+}
+#precipitation.active {
+  border-color: var(--blue-accent-color);
+}
+#wind.active {
+  border-color: var(--teal-accent-color);
 }
 .unit-switch-div {
   display: flex;
@@ -226,6 +238,14 @@ text {
 path {
   stroke: var(--accent-color);
   fill: var(--accent-color-transparent)
+}
+.precip-graph {
+  stroke: var(--blue-accent-color);
+  fill: var(--blue-accent-color-transparent)
+}
+.wind-graph {
+  stroke: var(--teal-accent-color);
+  fill: var(--teal-accent-color-transparent)
 }
 /* Forecast details ================================================================== */
 .forecast-details {
