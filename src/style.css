@@ -2,10 +2,10 @@
   --main-font-color: rgb(45, 45, 65);
   --secondary-font-color: rgb(105, 105, 125);
   --light-font-color: rgb(155, 155, 175);
-  --accent-color: rgb(235,110,76);
-  --accent-color-transparent: rgb(235, 110, 76, 0.3);
-  --blue-accent-color: rgb(74, 94, 219);
-  --blue-accent-color-transparent: rgb(74, 94, 219, 0.3);
+  --accent-color: rgb(235, 140, 76);
+  --accent-color-transparent: rgb(235, 140, 76, 0.3);
+  --blue-accent-color: rgb(127, 141, 231);
+  --blue-accent-color-transparent: rgb(127, 141, 231, 0.3);
   --teal-accent-color: rgb(74, 171, 219);
   --teal-accent-color-transparent: rgb(74, 171, 219, 0.3);
   --light-accent: rgb(0, 0, 0, .2);
@@ -290,13 +290,11 @@ path {
   background-color: transparent;
   height: 80px;
   width: 100px;
-  user-select: none;
   border: none;
 }
 .day-forecast-div img {
   margin-left: -16px;
   margin-top: -26px;
-  user-select: none;
 }
 .forecast-details .spacer {
   background-color: var(--light-font-color);
