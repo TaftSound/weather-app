@@ -5,7 +5,6 @@ import {
   displayCurrentWeather,
   displayWeatherForecast,
   displayCurrentLocation,
-  displayForecastGraph,
   displayDays,
   getSearchValue
 } from './dom-manipulation.mjs'

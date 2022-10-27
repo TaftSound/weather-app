@@ -7,6 +7,7 @@ const currentWeatherDescription = document.getElementById('weather-description')
 const currentLocation = document.getElementById('location')
 const currentDate = document.getElementById('date')
 
+const forecastGraphContainer = document.getElementsByClassName('forecast-graph')[0]
 const graphLine = document.getElementById('graph-line')
 const textPathChildren = document.getElementById('text-container').children
 const temperatureButton = document.getElementById('temperature')
@@ -44,17 +45,11 @@ export function displayCurrentWeather (weatherObject) {
   dayOneIcon.src = weatherObject.iconUrl
 }
 export function displayWeatherForecast (weatherObject) {
-  const fiveDayData = weatherObject.fiveDayData
-  for (const day in fiveDayData) {
-    const currentDayIcon = dayDivArray[day].firstElementChild.nextElementSibling.firstElementChild
-    const currentDayHigh = dayDivArray[day].lastElementChild.firstElementChild
-    const currentDayLow = dayDivArray[day].lastElementChild.lastElementChild
-    currentDayHigh.textContent = `${Math.round(fiveDayData[day].highTemp)}°`
-    currentDayLow.textContent = `${Math.round(fiveDayData[day].lowTemp)}°`
-    if (!fiveDayData[day].iconUrl) { continue }
-    currentDayIcon.src = fiveDayData[day].iconUrl
-  }
+  displayDailyForecast(weatherObject.fiveDayData)
   displayForecastGraph(weatherObject)
+  addDayButtonListeners(weatherObject)
+  moveForecastGraph(0, 0)
+  setSelectedDay(0)
 }
 
 export function displayCurrentLocation (locationName) {
@@ -64,6 +59,57 @@ export function displayDays (dateString, upcomingDaysArray) {
   currentDate.textContent = dateString
   for (let i = 0; i < 5; i++) {
     dayDivArray[i].firstElementChild.textContent = upcomingDaysArray[i]
+  }
+}
+
+function addDayButtonListeners (weatherObject) {
+  for (const day in dayDivArray) {
+    let listenerFunction
+    if (!+day) {
+      listenerFunction = () => {
+        moveForecastGraph(0, 0)
+        setSelectedDay(+day)
+      }
+    } else {
+      const dayOneShift = weatherObject.firstDayLength
+      const dayNumber = +day
+      listenerFunction = () => {
+        moveForecastGraph(dayOneShift, dayNumber)
+        setSelectedDay(+day)
+      }
+    }
+    dayDivArray[day].addEventListener('click', listenerFunction)
+  }
+}
+
+function setSelectedDay (dayNumber) {
+  for (const day in dayDivArray) {
+    dayDivArray[day].className = 'day-forecast-div'
+  }
+  dayDivArray[dayNumber].className = 'day-forecast-div selected-day'
+}
+
+function moveForecastGraph (firstDayLength, dayNumber) {
+  const svgArray = [...forecastGraphContainer.children]
+  let movePercentage
+  if (!firstDayLength) { movePercentage = 6.25 }
+  else { movePercentage = -(firstDayLength * 25) + -((dayNumber - 1) * 200) + 12.5 }
+  console.log(movePercentage)
+  for (const svg in svgArray) {
+    svgArray[svg].style.left = `${movePercentage}%`
+  }
+}
+
+function displayDailyForecast (fiveDayData) {
+  for (const day in fiveDayData) {
+    const currentDay = dayDivArray[day]
+    const currentDayIcon = currentDay.firstElementChild.nextElementSibling.firstElementChild
+    const currentDayHigh = currentDay.lastElementChild.firstElementChild
+    const currentDayLow = currentDay.lastElementChild.lastElementChild
+    currentDayHigh.textContent = `${Math.round(fiveDayData[day].highTemp)}°`
+    currentDayLow.textContent = `${Math.round(fiveDayData[day].lowTemp)}°`
+    if (!fiveDayData[day].iconUrl) { continue }
+    currentDayIcon.src = fiveDayData[day].iconUrl
   }
 }
 

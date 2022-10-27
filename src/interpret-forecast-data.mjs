@@ -14,7 +14,7 @@ function interpretGraphData (dataObject, fiveDayData) {
     for (const time in dataObject[day]) {
       const temp = dataObject[day][time].main.temp
       const wind = dataObject[day][time].wind.speed
-      const precipitation = dataObject[day][time].pop
+      const precipitation = dataObject[day][time].pop * 100
       const precipY = (precipitation / 10) * 9
       const tempY = (temp - minMaxQuotients.lowTemp) * minMaxQuotients.tempQuotient
       const windY = (wind - minMaxQuotients.lowWind) * minMaxQuotients.windQuotient
