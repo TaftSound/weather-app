@@ -15,10 +15,11 @@ function interpretGraphData (dataObject, fiveDayData) {
       const temp = dataObject[day][time].main.temp
       const wind = dataObject[day][time].wind.speed
       const precipitation = dataObject[day][time].pop * 100
+      const hour = getLocaleDataHour(dataObject[day][time].dt)
       const precipY = (precipitation / 10) * 9
       const tempY = (temp - minMaxQuotients.lowTemp) * minMaxQuotients.tempQuotient
       const windY = (wind - minMaxQuotients.lowWind) * minMaxQuotients.windQuotient
-      graphData.push({ temp, wind, precipitation, tempY, windY, precipY })
+      graphData.push({ temp, wind, precipitation, tempY, windY, precipY, hour })
     }
   }
   return graphData
@@ -78,6 +79,14 @@ function normalizeDate (dateValue) {
   localeTime = localeTime.split(',')
   return localeTime[0]
 }
+function getLocaleDataHour (dateValue) {
+  let localeTime = new Date((dateValue + timeZone) * 1000).toUTCString()
+  localeTime = localeTime.split(',')
+  const hour = +localeTime[1].split(' ')[4].split(':')[0]
+  if (hour < 12) return `${hour}am`
+  if (hour === 12) return 'Noon'
+  if (hour > 12) return `${hour - 12}pm`
+}
 
 export function parseCurrentWeatherData (dataObject) {
   const temp = Math.round(dataObject.main.temp)
@@ -93,16 +102,16 @@ export function parseCurrentWeatherData (dataObject) {
 export function parseWeatherForecastData (dataObject) {
   let dateKey = ''
   let dayNumber = -1
-  const fiveDayData = []
+  const organizedData = []
   for (let i = 0; i < 40; i++) {
     const currentReport = dataObject.list[i]
     const currentReportDate = normalizeDate(currentReport.dt)
     if (currentReportDate !== dateKey) {
       dateKey = currentReportDate
       dayNumber++
-      fiveDayData[dayNumber] = []
+      organizedData[dayNumber] = []
     }
-    fiveDayData[dayNumber].push(currentReport)
+    organizedData[dayNumber].push(currentReport)
   }
-  return interpretData(fiveDayData)
+  return interpretData(organizedData)
 }

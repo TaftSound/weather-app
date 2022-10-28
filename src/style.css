@@ -14,7 +14,7 @@
 body {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr .9fr 1fr;
+  grid-template-rows: 1fr .8fr .1fr 1fr;
   align-items: center;
   min-height: 100vh;
   margin: 0px;
@@ -210,7 +210,7 @@ input:focus::placeholder {
 .forecast-graph {
   grid-column: 1/-1;
   box-sizing: border-box;
-  margin: 15px 25px;
+  margin: 0px 25px;
   height: 100%;
   width: auto;
   overflow: hidden;
@@ -221,7 +221,6 @@ input:focus::placeholder {
 }
 svg {
   overflow: visible;
-  /* transform: rotateX(180deg); */
   position: absolute;
   margin: auto auto;
   height: calc(100% - 30px);
@@ -232,9 +231,16 @@ svg {
   left: 6.25%;
   transition: .5s;
 }
+.graph-times svg {
+  height: 100%;
+}
 text {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   fill: var(--main-font-color);
+  text-anchor: middle;
+}
+.graph-times text {
+  fill: var(--light-font-color);
 }
 path {
   stroke: var(--accent-color);

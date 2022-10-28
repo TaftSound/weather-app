@@ -8,8 +8,10 @@ const currentLocation = document.getElementById('location')
 const currentDate = document.getElementById('date')
 
 const forecastGraphContainer = document.getElementsByClassName('forecast-graph')[0]
+const timeTextContainer = document.getElementsByClassName('forecast-graph')[1]
 const graphLine = document.getElementById('graph-line')
 const textPathChildren = document.getElementById('text-container').children
+const timeTextPathChildren = document.getElementById('time-text-container').children
 const temperatureButton = document.getElementById('temperature')
 const precipButton = document.getElementById('precipitation')
 const windButton = document.getElementById('wind')
@@ -90,10 +92,13 @@ function setSelectedDay (dayNumber) {
 }
 
 function moveForecastGraph (firstDayLength, dayNumber) {
-  const svgArray = [...forecastGraphContainer.children]
+  const svgArray = [...forecastGraphContainer.children, timeTextContainer.children[0]]
   let movePercentage
-  if (!firstDayLength) { movePercentage = 6.25 }
-  else { movePercentage = -(firstDayLength * 25) + -((dayNumber - 1) * 200) + 12.5 }
+  if (!firstDayLength) {
+    movePercentage = 6.25
+  } else {
+    movePercentage = -(firstDayLength * 25) + -((dayNumber - 1) * 200) + 12.5
+  }
   console.log(movePercentage)
   for (const svg in svgArray) {
     svgArray[svg].style.left = `${movePercentage}%`
@@ -141,6 +146,7 @@ function setActiveGraphButton (button, graphLineClass) {
 function displayGraph (dataObject, propertyName, propertyY, descriptor) {
   const lineString = createGraphLineString(dataObject.graphData)
   placeGraphText(dataObject.graphData)
+  placeGraphTimes(dataObject.graphData)
   graphLine.setAttribute('d', lineString)
 
   function createGraphLineString (graphDataObject) {
@@ -155,12 +161,21 @@ function displayGraph (dataObject, propertyName, propertyY, descriptor) {
   }
   function placeGraphText (graphDataObject) {
     for (const point in graphDataObject) {
-      const xValue = point * 12.5 - 1.5
+      const xValue = point * 12.5
       const yValue = 87 - graphDataObject[point][propertyY]
       const textValue = Math.round(graphDataObject[point][propertyName])
       textPathChildren[point].setAttribute('x', `${xValue}%`)
       textPathChildren[point].setAttribute('y', `${yValue}%`)
       textPathChildren[point].textContent = `${textValue}${descriptor}`
+    }
+  }
+  function placeGraphTimes (graphDataObject) {
+    for (const point in graphDataObject) {
+      const xValue = point * 12.5
+      const yValue = 85
+      timeTextPathChildren[point].setAttribute('x', `${xValue}%`)
+      timeTextPathChildren[point].setAttribute('y', `${yValue}%`)
+      timeTextPathChildren[point].textContent = `${graphDataObject[point].hour}`
     }
   }
 }
