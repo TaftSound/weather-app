@@ -1,11 +1,13 @@
 import { retrieveForecastData } from './get-forecast-data.mjs'
 import { searchForLocation, getUserLocation, getLocationName, getLat, getLon } from './geocoding.mjs'
 import { getCurrentDate, getNextDays, setLocaleDate } from './date-data.mjs'
+import { isDayOneOver } from './interpret-forecast-data.mjs'
 import {
   displayCurrentWeather,
   displayWeatherForecast,
   displayCurrentLocation,
   displayDays,
+  displayShiftedDays,
   getSearchValue
 } from './dom-manipulation.mjs'
 
@@ -25,7 +27,8 @@ async function renderWeatherForecast () {
     const locationName = getLocationName()
     displayCurrentLocation(locationName)
     setLocaleDate(weatherObject[0])
-    displayDays(getCurrentDate(), getNextDays())
+    if (isDayOneOver()) { displayShiftedDays(getNextDays()) }
+    else { displayDays(getCurrentDate(), getNextDays()) }
     displayCurrentWeather(weatherObject[0])
     displayWeatherForecast(weatherObject[1])
   } catch (error) {

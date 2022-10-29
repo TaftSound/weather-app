@@ -9,12 +9,13 @@ let date = ''
 let formattedDate = ''
 
 export function getNextDays () {
-  const dayTwo = format(date, 'E')
-  const dayThree = format(add(date, { days: 1 }), 'E')
-  const dayFour = format(add(date, { days: 2 }), 'E')
-  const dayFive = format(add(date, { days: 3 }), 'E')
-  const daySix = format(add(date, { days: 4 }), 'E')
-  return ([dayTwo, dayThree, dayFour, dayFive, daySix])
+  const dayOne = format(date, 'E')
+  const dayTwo = format(add(date, { days: 1 }), 'E')
+  const dayThree = format(add(date, { days: 2 }), 'E')
+  const dayFour = format(add(date, { days: 3 }), 'E')
+  const dayFive = format(add(date, { days: 4 }), 'E')
+  const daySix = format(add(date, { days: 5 }), 'E')
+  return ([dayOne, dayTwo, dayThree, dayFour, dayFive, daySix])
 }
 
 export function getCurrentDate () {

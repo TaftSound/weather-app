@@ -1,8 +1,9 @@
 let timeZone
+let dayOneOver = false
 
 function interpretData (dataObject) {
-  let firstDayLength = dataObject[0].length
-  if (firstDayLength === 8) { firstDayLength = 0 }
+  const firstDayLength = dataObject[0].length
+  if (firstDayLength === 8) { dayOneOver = true }
   const fiveDayData = interpretFiveDayData(dataObject)
   const graphData = interpretGraphData(dataObject, fiveDayData)
   return { fiveDayData, graphData, firstDayLength }
@@ -83,6 +84,7 @@ function getLocaleDataHour (dateValue) {
   let localeTime = new Date((dateValue + timeZone) * 1000).toUTCString()
   localeTime = localeTime.split(',')
   const hour = +localeTime[1].split(' ')[4].split(':')[0]
+  if (hour === 0) return '12am'
   if (hour < 12) return `${hour}am`
   if (hour === 12) return 'Noon'
   if (hour > 12) return `${hour - 12}pm`
@@ -114,4 +116,8 @@ export function parseWeatherForecastData (dataObject) {
     organizedData[dayNumber].push(currentReport)
   }
   return interpretData(organizedData)
+}
+
+export function isDayOneOver () {
+  return dayOneOver
 }

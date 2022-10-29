@@ -63,6 +63,13 @@ export function displayDays (dateString, upcomingDaysArray) {
     dayDivArray[i].firstElementChild.textContent = upcomingDaysArray[i]
   }
 }
+export function displayShiftedDays (upcomingDaysArray) {
+  currentDate.textContent = upcomingDaysArray[0]
+  for (let i = 0; i < 5; i++) {
+    dayDivArray[i].firstElementChild.textContent = upcomingDaysArray[i + 1]
+    console.log(upcomingDaysArray[i + 1])
+  }
+}
 
 function addDayButtonListeners (weatherObject) {
   for (const day in dayDivArray) {
@@ -94,11 +101,12 @@ function setSelectedDay (dayNumber) {
 function moveForecastGraph (firstDayLength, dayNumber) {
   const svgArray = [...forecastGraphContainer.children, timeTextContainer.children[0]]
   let movePercentage
-  if (!firstDayLength) {
+  if (!dayNumber) {
     movePercentage = 6.25
   } else {
     movePercentage = -(firstDayLength * 25) + -((dayNumber - 1) * 200) + 12.5
   }
+  if (movePercentage === 12.5) { movePercentage = 6.25 }
   console.log(movePercentage)
   for (const svg in svgArray) {
     svgArray[svg].style.left = `${movePercentage}%`
@@ -156,7 +164,7 @@ function displayGraph (dataObject, propertyName, propertyY, descriptor) {
       const yValue = 100 - graphDataObject[point][propertyY]
       lineString = lineString + ` L ${xValue} ${yValue}`
     }
-    lineString = lineString + ' L 500 125'
+    lineString = lineString + ` L 500 ${100 - graphDataObject[39][propertyY]}` + ' L 500 125'
     return lineString
   }
   function placeGraphText (graphDataObject) {
